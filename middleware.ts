@@ -5,7 +5,7 @@ import { jwtVerify } from "jose";
 const USER_SESSION_COOKIE = "shalizar-user-session";
 const ADMIN_SESSION_COOKIE = "shalizar-admin-session";
 
-const adminRoutes = ["/admin", "/admin/orders", "/admin/products", "/admin/login"];
+const adminRoutes = ["/admin", "/admin/orders", "/admin/products"];
 const customerRoutes = [
   "/dashboard",
   "/dashboard/wishlist",
@@ -61,12 +61,27 @@ export async function middleware(request: NextRequest) {
   const isCustomerRoute = customerRoutes.some((route) =>
     pathname.startsWith(route),
   );
-  const isAuthRoute = authRoutes.includes(pathname);
+  const isCustomerAuthRoute = pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register");
+  const isAdminLoginRoute = pathname === "/admin/login";
 
-  if (isAdminRoute && !isAdmin) {
+  // If user is already authenticated, redirect away from auth pages
+  if (isCustomerAuthRoute && isAuthenticated) {
+    const target = isAdmin ? "/admin/orders" : "/dashboard";
+    return NextResponse.redirect(new URL(target, request.url));
+  }
+
+  // If admin is already logged in, redirect away from admin login
+  if (isAdminLoginRoute && isAdmin) {
+    return NextResponse.redirect(new URL("/admin/orders", request.url));
+  }
+
+  // If accessing admin routes without admin auth, redirect to admin login
+  // But skip the admin login page itself to avoid redirect loop
+  if (isAdminRoute && !isAdmin && !isAdminLoginRoute) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
+  // If accessing customer routes without customer auth
   if (isCustomerRoute && !isCustomer) {
     // Admins may view order invoices/details but not the customer-only pages
     const isOrderRoute =
@@ -74,11 +89,6 @@ export async function middleware(request: NextRequest) {
     if (!(isOrderRoute && isAdmin)) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
-  }
-
-  if (isAuthRoute && isAuthenticated) {
-    const target = isAdmin ? "/admin/orders" : "/dashboard";
-    return NextResponse.redirect(new URL(target, request.url));
   }
 
   return NextResponse.next();
