@@ -9,18 +9,32 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^2.32.0",
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/bcrypt": "^6.0.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/npm": "^7.19.3",
+    "@types/uuid": "^10.0.0",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.15",
+    "mongoose": "^9.12.0",
     "next": "16.4.3",
+    "postcss": "^8.5.32",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "react-multi-date-picker": "^4.5.2",
+    "uuid": "^14.0.3",
+    "zod": "^4.6.7",
+    "zustand": "^5.0.16"
   },
   "devDependencies": {
-    "@tailwindcss/turbopack": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.43",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.3.4",
     "typescript": "^5"
   }
 }

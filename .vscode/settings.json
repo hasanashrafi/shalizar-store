@@ -1,0 +1,4 @@
+{
+  "inlineChat.defaultModel": "Gemini 3.8 Flash (gemini)",
+  "chat.planAgent.defaultModel": "Gemini 3.8 Flash (gemini)"
+}
